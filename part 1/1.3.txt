@@ -1,7 +1,0 @@
-Secret message: 'You can find the source code here: https://github.com/docker-hy'
-
-Commands:
-docker run devopsdockeruh/simple-web-service:ubuntu
-docker ps
-<bd13ee3e09d1aeb58fa152bec378cfc7ae83e5e10f52115b8c3ac42125a75db7 container id>
-docker exec -it bd tail -f .text/.log
