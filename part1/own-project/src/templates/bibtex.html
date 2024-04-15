@@ -1,0 +1,70 @@
+{% from "macros.html" import article_bibtex, book_bibtex, inproceeding_bibtex %}
+
+{% extends "base.html" %}
+
+{% block title %}BibTeX Entries{% endblock %}
+
+{% block content %}
+{%- if search_query -%}
+<h3 class="text-center">
+	{%- if search_option == "OR" -%}
+	References that match any of
+	{%- elif search_option == "AND" -%}
+	References that match all of
+	{%- endif -%}
+	{{- " \"" + "\", \"".join(search_query.split()) + "\"." -}}
+    <button id="reset-search" onclick="resetSearch()">Reset Search</button>
+</h3>
+{%- endif -%}
+<br>
+<div class="button-container">
+<button onclick = "copy_to_clipboard()">Click to copy all BibTeX to clipboard</button>
+</div>
+<br>
+<!-- Articles BibTeX -->
+<div class="bibtex-container">
+    {% for article in articles %}
+    <div class="bibtex-entry">
+        <pre>
+{{ article_bibtex(article) }}
+</pre>
+    </div>
+    {% endfor %}
+
+<!-- Books BibTeX -->
+<div class="bibtex-container">
+    {% for book in books %}
+    <div class="bibtex-entry">
+        <pre>
+{{ book_bibtex(book) }}
+</pre>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Inproceedings BibTeX -->
+<div class="bibtex-container">
+    {% for inproceeding in inproceedings %}
+    <div class="bibtex-entry">
+        <pre>
+{{ inproceeding_bibtex(inproceeding) }}
+</pre>
+    </div>
+    {% endfor %}
+</div>
+<script>
+    function copy_to_clipboard() {
+        var bibtexEntries = document.querySelectorAll('.bibtex-entry pre');
+        var textarea = document.createElement('textarea');
+        textarea.value = Array.from(bibtexEntries).map(entry => entry.innerText).join('\n');
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        alert("Copied to clipboard")
+    }
+    function resetSearch() {
+    window.location.href = '/';
+}
+</script>
+{% endblock %}

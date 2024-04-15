@@ -1,0 +1,42 @@
+[MASTER]
+
+ignore=tests
+
+[MESSAGE CONTROL]
+disable=missing-function-docstring,
+	missing-module-docstring,
+	import-error,
+	cyclic-import,
+	unused-import,
+	wrong-import-position,
+	broad-exception-caught
+
+[FORMAT]
+
+# Expected format of line ending, e.g. empty (any line ending), LF or CRLF.
+expected-line-ending-format=
+
+# Maximum number of characters on a single line.
+max-line-length=100
+
+# Maximum number of lines in a module.
+max-module-lines=1000
+
+[REFACTORING]
+
+max-nested-blocks=3
+
+[DESIGN]
+
+# Maximum number of arguments for function / method.
+max-args=8
+
+# Maximum number of return statements in function / method.
+max-returns=8
+
+
+# Maximum number of statements in function / method body.
+max-statements=22
+
+# Maximum number of attributes for a class.
+max-attributes=10

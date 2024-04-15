@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}New Reference{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3 class="text-center">New Reference</h3>
+    <br>
+    <form method="post" action="">
+	    <input type="text" placeholder="Get from DOI" class="doi" name="doi" id="doi">
+	    <input type="submit" class="doi" value="Submit">
+    </form>
+
+    <!-- Dropdown for Reference Type Selection -->
+    <div class="form-group">
+        <label for="referenceType">Reference Type:</label>
+        <select class="form-control-dropdown" id="referenceType" onchange="updateFormFields()">
+	    <option value="article"{% if form_data and form_data["type"] == "article"
+	    %} selected="selected"{% endif %}>Article</option>
+	    <option value="book"{% if form_data and form_data["type"] == "book"
+	    %} selected="selected"{% endif %}>Book</option>
+	    <option value="inproceeding"{% if form_data and form_data["type"] == "inproceeding"
+	    %} selected="selected"{% endif %}>Inproceeding</option>
+        </select>
+    </div>
+
+    {% for reftype, fields in [
+	("article", (
+	    (  "author",    "Author:",    "text",   True),
+	    (  "title",     "Title:",     "text",   True),
+	    (  "journal",   "Journal:",   "text",   True),
+	    (  "year",      "Year:",      "number", True),
+	    (  "volume",    "Volume:",    "text", False),
+	    (  "pages",     "Pages:",     "text",   False),
+	    (  "tag",       "Tags:",       "text",   False))),
+	("book", (
+	    (  "author",    "Author:",    "text",   True),
+	    (  "title",     "Title:",     "text",   True),
+	    (  "publisher", "Publisher:", "text",   True),
+	    (  "year",      "Year:",      "number", True),
+	    (  "volume",    "Volume:",    "text", False),
+	    (  "pages",     "Pages:",     "text",   False),
+	    (  "tag",       "Tags:",       "text",   False))),
+	("inproceeding", (
+	    (  "author",    "Author:",    "text",   True),
+	    (  "title",     "Title:",     "text",   True),
+	    (  "booktitle", "Booktitle:", "text",   True),
+	    (  "year",      "Year:",      "number", True),
+	    (  "pages",     "Pages:",     "text",   False),
+	    (  "tag",       "Tags:",       "text",   False))),
+    ] %}
+    <!-- {{ reftype.capitalize() }} Form -->
+    <div id="{{ reftype + "Fields" }}" style="display: none;">
+	<form method="post" class="needs-validation">
+	    <!-- {{ reftype.capitalize() }} Form Fields -->
+	    <input type="hidden" name="type" value="{{ reftype }}">
+	    {% for name, label, type, required in fields %}
+	    <div class="form-group">
+		<label for="{{ name }}">{{ label }}</label>
+		<input type="{{ type }}" class="form-control" name="{{ name }}" id="{{ name }}"
+		{%- if form_data and form_data["type"] == reftype and name in form_data
+		%} value="{{ form_data[name] }}"{% endif -%}
+		{%- if required %} required{% endif -%}
+		{%- if name == "pages" %} pattern="\d+([- ]+\d+)?"{% endif -%}
+		>
+	    </div>
+	    {% endfor %}
+		<div class="d-flex justify-content-center">
+	    <button type="submit" class="btn btn-primary">Save</button>
+		</div>
+	</form>
+    </div>
+    {% endfor %}
+</div>
+
+
+<script>
+    function updateFormFields() {
+        var selection = document.getElementById('referenceType').value;
+        document.getElementById('articleFields').style.display = (selection === 'article') ? 'block' : 'none';
+        document.getElementById('bookFields').style.display = (selection === 'book') ? 'block' : 'none';
+        document.getElementById('inproceedingFields').style.display = (selection === 'inproceeding') ? 'block' : 'none';
+    }
+
+    // Initialize the forms display on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        updateFormFields(); 
+    });
+</script>
+
+
+{% endblock %}
